@@ -7,7 +7,6 @@ This is primarily designed for RpNation's BBCode community as a generic template
 ## Development Roadmap/TODOs
 
 - [ ] Add local save/cache recovery
-- [ ] Add API integration with GitHub and GitHub Gist for quick input
 
 ### Possible Future Changes
 
