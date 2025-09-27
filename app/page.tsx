@@ -5,9 +5,10 @@ import { TemplateInput } from '@/components/templater/template-input';
 import { GenerateOutput } from '@/components/templater/generate-output';
 import { TemplateDebug } from '@/components/templater/template-debug';
 import { Metadata } from 'next';
+import { getGistDataById } from './(github-gist)/actions';
 
 type Props = {
-  searchParams?: { pastebin?: string };
+  searchParams?: { pastebin?: string; gist?: string };
 };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -34,18 +35,32 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function Home({ searchParams }: Props) {
-  const pastebinurl = searchParams?.pastebin ? 'https://pastebin.com/' + searchParams.pastebin : '';
-  const pastebinObj = {
-    url: pastebinurl,
-    content: {} as getPastebinResult,
+  const dataInput = {
+    type: '',
+    url: '',
+    content: {} as any,
     error: '',
   };
+  const pastebinurl = searchParams?.pastebin ? 'https://pastebin.com/' + searchParams.pastebin : '';
+  const gistId = searchParams?.gist || '';
   if (pastebinurl) {
     const res = await getPastebin(pastebinurl);
     if ('error' in res) {
-      pastebinObj.error = res.error;
+      dataInput.error = res.error;
     } else {
-      pastebinObj.content = res;
+      dataInput.type = 'pastebin';
+      dataInput.url = pastebinurl;
+      dataInput.content = res as getPastebinResult;
+    }
+  } else if (gistId) {
+    try {
+      const res = await getGistDataById(gistId);
+
+      dataInput.type = 'gist';
+      dataInput.url = res.html_url;
+      dataInput.content = res as any;
+    } catch (error: any) {
+      dataInput.error = error.message;
     }
   }
 
@@ -62,12 +77,12 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <main className="flex min-h-screen flex-col items-start gap-4">
-      <TemplateProvider key={pastebinObj.content?.content || ''} templateInit={pastebinObj.content?.content || ''}>
-        <TemplateInput pastebin={pastebinObj} />
+      <TemplateProvider key={dataInput.content?.content || ''} templateInit={dataInput.content?.content || ''}>
+        <TemplateInput input={dataInput} />
         <label className="form-control relative w-full min-w-full flex-row flex-wrap">
           <TemplateDebug />
         </label>
-        {titleSection(pastebinObj.content?.metadata?.title, pastebinObj.content?.metadata?.author)}
+        {titleSection(dataInput.content?.metadata?.title, dataInput.content?.metadata?.author)}
         <FormFieldGenerator />
         <GenerateOutput />
       </TemplateProvider>
