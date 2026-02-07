@@ -358,10 +358,10 @@
   dependencies:
     glob "7.1.7"
 
-"@next/mdx@^14.0.4":
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/@next/mdx/-/mdx-14.0.4.tgz#3bb4ec6da530031410f91e8ab3d0cf6c833dff3a"
-  integrity sha512-w0b+A2LRdlqqTIzmaeqPOaafid2cYYYjETA+G+3ZFwkNbBQjvZp57P1waOexF3MGHzcCEoXEnhYpAc+FO6S0Rg==
+"@next/mdx@^15.5.12":
+  version "15.5.12"
+  resolved "https://registry.yarnpkg.com/@next/mdx/-/mdx-15.5.12.tgz#45d92e2c542587d04304daccb64bcf60471b02d7"
+  integrity sha512-XXQcGERYHrC41rJXzd8kqEhsjeQ1r5N+eUxA+gcl8COapdVqI7iZjT4Npz6D845/txFTtechafx/+s8RZxO2aw==
   dependencies:
     source-map "^0.7.0"
 
