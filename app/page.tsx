@@ -8,10 +8,11 @@ import { Metadata } from 'next';
 import { getGistDataById } from './(github-gist)/actions';
 
 type Props = {
-  searchParams?: { pastebin?: string; gist?: string };
+  searchParams?: Promise<{ pastebin?: string; gist?: string }>;
 };
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const metadata: Metadata = {
     title: 'Text Templater',
     description: 'Plain Text Template to Form Field Generator',
@@ -34,7 +35,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return metadata;
 }
 
-export default async function Home({ searchParams }: Props) {
+export default async function Home(props: Props) {
+  const searchParams = await props.searchParams;
   const dataInput = {
     type: '',
     url: '',
